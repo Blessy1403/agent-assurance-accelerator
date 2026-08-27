@@ -1,12 +1,19 @@
 # Virtual environment
 venv/
+.venv/
 
 # Environment variables / secrets
-.env 
+.env
 
-# Python cache 
+# Python cache
 __pycache__/
 *.py[cod]
 
-# VS code
-.vscode/ 
+# Pytest cache
+.pytest_cache/
+
+# Database files
+*.db
+
+# VS Code
+.vscode/
