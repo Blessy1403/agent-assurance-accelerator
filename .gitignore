@@ -15,5 +15,8 @@ __pycache__/
 # Database files
 *.db
 
+# Generated data
+data/*.jsonl
+
 # VS Code
 .vscode/
