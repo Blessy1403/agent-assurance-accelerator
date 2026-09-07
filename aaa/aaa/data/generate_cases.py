@@ -5,7 +5,7 @@ from pathlib import Path
 import argparse
 
 
-from aaa.aaa.domain.loader import DomainConfig
+from aaa.domain.loader import DomainConfig
 
 
 def generate_cases(
@@ -120,11 +120,11 @@ def main():
 
     args = parser.parse_args()
 
-    from aaa.aaa.domain.loader import load_domain_config
+    from aaa.domain.loader import load_domain_config
 
     config = load_domain_config(
-        "aaa/aaa/domain/insurance.yaml"
-    )
+    "aaa/domain/insurance.yaml"
+)
 
     generated_at = datetime(2026, 1, 1)
 
