@@ -62,3 +62,30 @@ class TraceEvent(BaseModel):
                 "timestamp must be timezone-aware"
             )
         return value
+    
+class RunSummary(BaseModel):
+    """Summarizes the result of one pipeline execution."""
+
+    run_id: str
+    case_id: str
+
+    # Decision:
+    # Retained for future counterfactual re-runs.
+    parent_run_id: str | None = None
+
+    status: str
+
+    started_at: datetime
+    completed_at: datetime
+
+    trace_event_count: int
+
+    @field_validator("started_at", "completed_at")
+    @classmethod
+    def require_timezone(cls, value: datetime) -> datetime:
+        """Ensures run timestamps include timezone information."""
+        if value.tzinfo is None:
+            raise ValueError(
+                "run timestamps must be timezone-aware"
+            )
+        return value
