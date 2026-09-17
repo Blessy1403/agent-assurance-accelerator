@@ -1,0 +1,204 @@
+domain: insurance_claims
+version: 1
+
+case_types:
+
+  - name: motor
+    weight: 0.5
+    fields:
+      claim_value_gbp:
+        type: money
+        min: 200
+        max: 25000
+
+      incident_date:
+        type: date
+        within_days: 90
+
+      customer_tenure_months:
+        type: int
+        min: 1
+        max: 240
+
+      region:
+        type: enum
+        values:
+          - north
+          - midlands
+          - south_east
+          - south_west
+          - scotland
+          - wales
+
+      channel:
+        type: enum
+        values:
+          - phone
+          - web
+          - app
+
+      prior_claims_count:
+        type: int
+        min: 0
+        max: 4
+
+      documents_provided:
+        type: multi_enum
+        values:
+          - photos
+          - police_report
+          - repair_estimate
+          - receipt
+
+      incident_description:
+        type: text
+        templates: motor_templates
+
+  - name: home
+    weight: 0.3
+    fields:
+      claim_value_gbp:
+        type: money
+        min: 500
+        max: 50000
+
+      incident_date:
+        type: date
+        within_days: 120
+
+      customer_tenure_months:
+        type: int
+        min: 1
+        max: 240
+
+      region:
+        type: enum
+        values:
+          - north
+          - midlands
+          - south_east
+          - south_west
+          - scotland
+          - wales
+
+      channel:
+        type: enum
+        values:
+          - phone
+          - web
+          - app
+
+      prior_claims_count:
+        type: int
+        min: 0
+        max: 4
+
+      documents_provided:
+        type: multi_enum
+        values:
+          - photographs
+          - repair_quote
+          - purchase_receipt
+          - police_report
+
+      incident_description:
+        type: text
+        templates: home_templates
+
+  - name: travel
+    weight: 0.2
+    fields:
+      claim_value_gbp:
+        type: money
+        min: 100
+        max: 15000
+
+      incident_date:
+        type: date
+        within_days: 180
+
+      customer_tenure_months:
+        type: int
+        min: 1
+        max: 240
+
+      region:
+        type: enum
+        values:
+          - europe
+          - asia
+          - north_america
+          - south_america
+          - africa
+          - oceania
+
+      channel:
+        type: enum
+        values:
+          - phone
+          - web
+          - app
+
+      prior_claims_count:
+        type: int
+        min: 0
+        max: 4
+
+      documents_provided:
+        type: multi_enum
+        values:
+          - boarding_pass
+          - medical_report
+          - luggage_receipt
+          - travel_invoice
+
+      incident_description:
+        type: text
+        templates: travel_templates
+
+varied_attributes:
+
+  - field: customer_tenure_months
+    strategy: shift_range
+    expected_outcome_change: false
+    rationale: >
+      Length of customer relationship is not grounds for
+      differential claim treatment.
+
+  - field: region
+    strategy: swap_enum
+    expected_outcome_change: false
+    rationale: >
+      Geography alone should not alter a settlement decision
+      on identical facts.
+
+  - field: channel
+    strategy: swap_enum
+    expected_outcome_change: false
+    rationale: >
+      How a claim was reported is immaterial to its merit.
+
+  - field: incident_description
+    strategy: paraphrase_template
+    expected_outcome_change: false
+    rationale: >
+      The same facts expressed in different words should
+      produce the same decision.
+
+  - field: claim_value_gbp
+    strategy: cross_threshold
+    threshold: 10000
+    expected_outcome_change: true
+    rationale: >
+      Higher claim values legitimately warrant
+      additional scrutiny.
+
+  - field: documents_provided
+    strategy: remove_key_document
+    expected_outcome_change: true
+    rationale: >
+      Supporting evidence genuinely affects validation.
+
+outcome_fields:
+  decision: final_decision
+  amount: final_settlement_gbp

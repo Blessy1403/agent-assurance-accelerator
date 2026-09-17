@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-01-01T00:00:00",
+  "seed": 42,
+  "config_domain": "insurance_claims",
+  "config_version": 1,
+  "total_cases": 50,
+  "counts_by_type": {
+    "home": 16,
+    "motor": 26,
+    "travel": 8
+  }
+}
